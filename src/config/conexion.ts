@@ -1,6 +1,6 @@
 import mysql from 'mysql2/promise';
 
-export const pool = mysql.createPool({
+export const connection = mysql.createPool({
   host: process.env.DB_HOST ?? 'localhost',
   user: process.env.DB_USER ?? 'root',
   password: process.env.DB_PASSWORD ?? '',
@@ -11,7 +11,7 @@ export const pool = mysql.createPool({
 });
 
 export async function verificarConexion(): Promise<void> {
-  const conexion = await pool.getConnection();
+  const conexion = await connection.getConnection();
   try {
     await conexion.ping();
     console.log('Conexión a la base de datos establecida correctamente.');
