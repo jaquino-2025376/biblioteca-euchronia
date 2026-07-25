@@ -39,6 +39,7 @@ create table roles(
     constraint fk_id_usuario_rol
         foreign key (fk_id_usuario_rol)
         references usuarios(id_usuario)
+        on delete cascade
 );
 
 create table libros(
@@ -52,13 +53,16 @@ create table libros(
     fk_id_editorial_libro int not null,
     constraint fk_id_autor_libro
         foreign key (fk_id_autor_libro)
-        references autores(id_autor),
+        references autores(id_autor)
+        on delete cascade,
     constraint fk_id_categoria_libro
         foreign key (fk_id_categoria_libro)
-        references categorias(id_categoria),
+        references categorias(id_categoria)
+        on delete cascade,
     constraint fk_id_editorial_libro
         foreign key (fk_id_editorial_libro)
         references editoriales(id_editorial)
+        on delete cascade
 );
 
 create table ejemplares(
@@ -69,6 +73,7 @@ create table ejemplares(
     constraint fk_id_libro_ejemplar
         foreign key (fk_id_libro_ejemplar)
         references libros(id_libro)
+        on delete cascade
 );
 
 create table prestamos(
@@ -81,10 +86,12 @@ create table prestamos(
     fk_id_libro_prestamo int not null,
     constraint fk_id_usuario_prestamo
         foreign key (fk_id_usuario_prestamo)
-        references usuarios(id_usuario),
+        references usuarios(id_usuario)
+        on delete cascade,
     constraint fk_id_libro_prestamo
         foreign key (fk_id_libro_prestamo)
         references libros(id_libro)
+        on delete cascade
 );
 
 create table multas(
@@ -97,6 +104,7 @@ create table multas(
     constraint fk_id_prestamo_multa
         foreign key (fk_id_prestamo_multa)
         references prestamos(id_prestamo)
+        on delete cascade
 );
 
 create table reservas(
@@ -114,10 +122,12 @@ create table reservas(
     fk_id_libro_reserva int not null,
     constraint fk_id_usuario_reserva
         foreign key (fk_id_usuario_reserva)
-        references usuarios(id_usuario),
+        references usuarios(id_usuario)
+        on delete cascade,
     constraint fk_id_libro_reserva
         foreign key (fk_id_libro_reserva)
         references libros(id_libro)
+        on delete cascade
 );
 
 create table resenias(
@@ -128,10 +138,12 @@ create table resenias(
     fk_id_libro_resenia int not null,
     constraint fk_id_usuario_resenia
         foreign key (fk_id_usuario_resenia)
-        references usuarios(id_usuario),
+        references usuarios(id_usuario)
+        on delete cascade,
     constraint fk_id_libro_resenia
         foreign key (fk_id_libro_resenia)
         references libros(id_libro)
+        on delete cascade
 );
 
 -- crud usuarios
@@ -149,6 +161,26 @@ create procedure sp_insert_usuario(
 begin
     insert into usuarios(nombre, apellido, correo, telefono, fecha_registro)
     values(p_nombre, p_apellido, p_correo, p_telefono, p_fecha_registro);
+end$$
+
+delimiter ;
+
+delimiter $$
+
+drop procedure if exists sp_obtener_usuario$$
+create procedure sp_obtener_usuario(
+    in p_id_usuario int
+)
+begin
+    select
+        id_usuario,
+        nombre,
+        apellido,
+        correo,
+        telefono,
+        fecha_registro
+    from usuarios
+    where id_usuario = p_id_usuario;
 end$$
 
 drop procedure if exists sp_listar_usuarios$$
@@ -207,6 +239,16 @@ begin
     select * from roles;
 end$$
 
+drop procedure if exists sp_obtener_rol$$
+create procedure sp_obtener_rol(
+    in p_id_rol int
+)
+begin
+    select *
+    from roles
+    where id_rol = p_id_rol;
+end$$
+
 drop procedure if exists sp_actualizar_rol$$
 create procedure sp_actualizar_rol(
     in p_id int,
@@ -244,6 +286,16 @@ create procedure sp_insert_autor(
 begin
     insert into autores(nombre_autor,nacionalidad,fecha_nacimiento)
     values(p_nombre,p_nacionalidad,p_fecha);
+end$$
+
+drop procedure if exists sp_obtener_autor$$
+create procedure sp_obtener_autor(
+    in p_id_autor int
+)
+begin
+    select *
+    from autores
+    where id_autor = p_id_autor;
 end$$
 
 drop procedure if exists sp_listar_autores$$
@@ -292,6 +344,16 @@ begin
     values(p_nombre, p_descripcion);
 end$$
 
+drop procedure if exists sp_obtener_categoria$$
+create procedure sp_obtener_categoria(
+    in p_id_categoria int
+)
+begin
+    select *
+    from categorias
+    where id_categoria = p_id_categoria;
+end$$
+
 drop procedure if exists sp_listar_categorias$$
 create procedure sp_listar_categorias()
 begin
@@ -334,6 +396,16 @@ create procedure sp_insert_editorial(
 begin
     insert into editoriales(nombre_editorial, pais_editorial)
     values(p_nombre, p_pais);
+end$$
+
+drop procedure if exists sp_obtener_editorial$$
+create procedure sp_obtener_editorial(
+    in p_id_editorial int
+)
+begin
+    select *
+    from editoriales
+    where id_editorial = p_id_editorial;
 end$$
 
 drop procedure if exists sp_listar_editoriales$$
@@ -407,6 +479,16 @@ begin
     select * from libros;
 end$$
 
+drop procedure if exists sp_obtener_libro$$
+create procedure sp_obtener_libro(
+    in p_id_libro int
+)
+begin
+    select *
+    from libros
+    where id_libro = p_id_libro;
+end$$
+
 drop procedure if exists sp_actualizar_libro$$
 create procedure sp_actualizar_libro(
     in p_id int,
@@ -441,7 +523,7 @@ end$$
 
 delimiter ;
 
--- crud multas
+-- crud ejemplar
 
 delimiter $$
 
@@ -470,6 +552,16 @@ begin
     select * from ejemplares;
 end$$
 
+drop procedure if exists sp_obtener_ejemplar$$
+create procedure sp_obtener_ejemplar(
+    in p_id_ejemplar int
+)
+begin
+    select *
+    from ejemplares
+    where id_ejemplar = p_id_ejemplar;
+end$$
+
 drop procedure if exists sp_actualizar_ejemplar$$
 create procedure sp_actualizar_ejemplar(
     in p_id int,
@@ -496,7 +588,7 @@ end$$
 
 delimiter ;
 
--- crud multas
+-- crud prestamos
 
 delimiter $$
 
@@ -532,6 +624,16 @@ drop procedure if exists sp_listar_prestamos$$
 create procedure sp_listar_prestamos()
 begin
     select * from prestamos;
+end$$
+
+drop procedure if exists sp_obtener_prestamo$$
+create procedure sp_obtener_prestamo(
+    in p_id_prestamo int
+)
+begin
+    select *
+    from prestamos
+    where id_prestamo = p_id_prestamo;
 end$$
 
 drop procedure if exists sp_actualizar_prestamo$$
@@ -599,6 +701,16 @@ drop procedure if exists sp_listar_multas$$
 create procedure sp_listar_multas()
 begin
     select * from multas;
+end$$
+
+drop procedure if exists sp_obtener_multa$$
+create procedure sp_obtener_multa(
+    in p_id_multa int
+)
+begin
+    select *
+    from multas
+    where id_multa = p_id_multa;
 end$$
 
 drop procedure if exists sp_actualizar_multa$$
@@ -670,6 +782,16 @@ begin
     select * from reservas;
 end$$
 
+drop procedure if exists sp_obtener_reserva$$
+create procedure sp_obtener_reserva(
+    in p_id_reserva int
+)
+begin
+    select *
+    from reservas
+    where id_reserva = p_id_reserva;
+end$$
+
 drop procedure if exists sp_actualizar_reserva$$
 create procedure sp_actualizar_reserva(
     in p_id int,
@@ -735,6 +857,16 @@ drop procedure if exists sp_listar_resenias$$
 create procedure sp_listar_resenias()
 begin
     select * from resenias;
+end$$
+
+drop procedure if exists sp_obtener_resenia$$
+create procedure sp_obtener_resenia(
+    in p_id_resenia int
+)
+begin
+    select *
+    from resenias
+    where id_resenia = p_id_resenia;
 end$$
 
 drop procedure if exists sp_actualizar_resenia$$
@@ -1102,4 +1234,3 @@ call sp_insert_resenia('Una novela ligera muy divertida y con excelentes ilustra
 call sp_insert_resenia('The Rising of the Shield Hero mejora mucho conforme avanza la historia.',4,22,24);
 
 call sp_insert_resenia('Monogatari destaca por sus diálogos, personajes y estilo visual único.',5,25,25);
-
