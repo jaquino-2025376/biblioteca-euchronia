@@ -4,9 +4,21 @@ import { Usuario } from "../models/usuario.js";
 export class UsuarioRepository {
 
     static async obtenerTodos() {
-        const [rows] = await connection.query("CALL sp_listar_usuarios()");
-        return rows;
+    const [rows]: any = await connection.query(
+        "CALL sp_listar_usuarios()"
+    );
+    return rows[0];
+}
+
+    static async obtenerPorId(id: number) {
+        const [rows]: any = await connection.query(
+            "CALL sp_obtener_usuario(?)",
+            [id]
+        );
+
+        return rows[0];
     }
+
 
     static async crear(usuario: Usuario) {
         await connection.query(
@@ -21,6 +33,7 @@ export class UsuarioRepository {
         );
     }
 
+
     static async actualizar(id: number, usuario: Usuario) {
         await connection.query(
             "CALL sp_actualizar_usuario(?,?,?,?,?,?)",
@@ -34,6 +47,7 @@ export class UsuarioRepository {
             ]
         );
     }
+
 
     static async eliminar(id: number) {
         await connection.query(
