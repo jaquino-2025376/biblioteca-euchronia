@@ -1,4 +1,5 @@
 export interface Rol{
  idRol : number;
- nombreRol : string;   
+ nombreRol : string;
+ fkIdUsuarioRol : number;   
 }
