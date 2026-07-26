@@ -4,4 +4,7 @@ export interface libro{
     anioPublicacion: number;
     stockFisico: number;
     archivoDigital: string;
+    fkIdAutorLibro: number;
+    fkIdCategoriaLibro: number;
+    fkIdEditorialLibro: number;
 }
