@@ -4,6 +4,7 @@ export interface multa {
     motivo: string;
     fechaGeneracion: Date;
     estado: estadoMulta;
+    fkIdPrestamoMulta: number;
 }
 
 export enum estadoMulta {
