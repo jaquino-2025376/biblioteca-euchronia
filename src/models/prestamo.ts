@@ -5,7 +5,7 @@ export interface Prestamo {
     estado: estadoPrestamo;
     cantidad: number;
     fkIdUsuarioPrestamo: number;
-    fkLibroPrestamo: number;
+    fkIdLibroPrestamo: number;
 }
 
 export enum estadoPrestamo {
