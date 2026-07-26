@@ -49,26 +49,18 @@ Desarrollar un sistema web de gestión bibliotecaria que permita administrar efi
 
 ## Backend
 
-- Java 21
-- Spring Boot
-- Spring MVC
-- Spring Data JPA
-- Hibernate
+- Node.js
+- Type Script
 - MySQL 8
 
 ## Frontend
 
-- HTML5
-- CSS3
-- JavaScript
-- TypeScript
-- Thymeleaf
+- 
 
 ## Herramientas
 
 - Git
 - GitHub
-- Maven
 - Replit AI
 
 ---
@@ -132,8 +124,6 @@ Entre las características implementadas se encuentran:
 
 # Características
 
-- Arquitectura MVC.
-- Persistencia con JPA/Hibernate.
 - Base de datos relacional.
 - Diseño responsivo.
 - Código orientado a objetos.
