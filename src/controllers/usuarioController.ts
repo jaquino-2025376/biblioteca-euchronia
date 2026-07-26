@@ -1,5 +1,8 @@
 import { IncomingMessage, ServerResponse } from "node:http";
 import { UsuarioRepository } from "../repositories/usuarioRepository.js";
+import { ValidationException } from "../exceptions/validationException.js";
+import { NotFoundException } from "../exceptions/notFoundException.js";
+import { validarCamposUsuario, validarUsuarioExiste } from "../validators/usuarioValidator.js";
 
 export class UsuarioController {
 
@@ -30,6 +33,8 @@ export class UsuarioController {
 
     static async obtenerPorId(req: IncomingMessage, res: ServerResponse, id: number) {
         try {
+            await validarUsuarioExiste(id);
+
             const usuario = await UsuarioRepository.obtenerPorId(id);
 
             res.writeHead(200, {
@@ -41,6 +46,12 @@ export class UsuarioController {
         } catch (error) {
 
             console.error(error);
+
+            if (error instanceof NotFoundException) {
+                res.writeHead(404, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ mensaje: error.message }));
+                return;
+            }
 
             res.writeHead(500, {
                 "Content-Type": "application/json"
@@ -56,6 +67,8 @@ export class UsuarioController {
     static async crear(req: IncomingMessage, res: ServerResponse, datos: any) {
         try {
 
+            validarCamposUsuario(datos);
+
             await UsuarioRepository.crear(datos);
 
             res.writeHead(201, {
@@ -69,6 +82,12 @@ export class UsuarioController {
         } catch (error) {
 
             console.error(error);
+
+            if (error instanceof ValidationException) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ mensaje: error.message }));
+                return;
+            }
 
             res.writeHead(500, {
                 "Content-Type": "application/json"
@@ -89,6 +108,9 @@ export class UsuarioController {
     ) {
         try {
 
+            validarCamposUsuario(datos);
+            await validarUsuarioExiste(id);
+
             await UsuarioRepository.actualizar(id, datos);
 
             res.writeHead(200, {
@@ -99,9 +121,22 @@ export class UsuarioController {
                 mensaje: "Usuario actualizado correctamente"
             }));
 
+
         } catch (error) {
 
             console.error(error);
+
+            if (error instanceof ValidationException) {
+                res.writeHead(400, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ mensaje: error.message }));
+                return;
+            }
+
+            if (error instanceof NotFoundException) {
+                res.writeHead(404, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ mensaje: error.message }));
+                return;
+            }
 
             res.writeHead(500, {
                 "Content-Type": "application/json"
@@ -121,6 +156,8 @@ export class UsuarioController {
     ) {
         try {
 
+            await validarUsuarioExiste(id);
+
             await UsuarioRepository.eliminar(id);
 
             res.writeHead(200, {
@@ -134,6 +171,12 @@ export class UsuarioController {
         } catch (error) {
 
             console.error(error);
+
+            if (error instanceof NotFoundException) {
+                res.writeHead(404, { "Content-Type": "application/json" });
+                res.end(JSON.stringify({ mensaje: error.message }));
+                return;
+            }
 
             res.writeHead(500, {
                 "Content-Type": "application/json"
