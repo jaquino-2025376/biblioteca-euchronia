@@ -2,6 +2,8 @@ export interface Reserva{
     idReserva: number;
     fechaReserva: Date;
     estado: estadoReserva;
+    fkIdUsuarioReserva: number;
+    fkIdLibroReserva: number;
 }
 
 export enum estadoReserva {
