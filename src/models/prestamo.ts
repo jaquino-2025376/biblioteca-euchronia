@@ -4,6 +4,8 @@ export interface Prestamo {
     fechaDevolucion: Date;
     estado: estadoPrestamo;
     cantidad: number;
+    fkIdUsuarioPrestamo: number;
+    fkLibroPrestamo: number;
 }
 
 export enum estadoPrestamo {
