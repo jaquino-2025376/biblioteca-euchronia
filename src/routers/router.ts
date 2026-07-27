@@ -1,6 +1,7 @@
 import { IncomingMessage, ServerResponse } from "node:http";
 import { usuarioRouter } from "./usuarioRouter.js";
 import { rolRouter } from "./rolRouter.js";
+import { categoriaRouter } from "./categoriaRouter.js";
 // ... importa el resto
 
 export async function router(req: IncomingMessage, res: ServerResponse) {
@@ -9,7 +10,7 @@ export async function router(req: IncomingMessage, res: ServerResponse) {
 
     if (await usuarioRouter(req, res, metodo, url)) return;
     if (await rolRouter(req, res, metodo, url)) return;
-    // ... resto de routers
+    if (await categoriaRouter(req, res, metodo, url)) return;
 
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ mensaje: "Ruta no encontrada" }));
