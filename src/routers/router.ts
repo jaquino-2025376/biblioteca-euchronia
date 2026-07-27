@@ -4,7 +4,7 @@ import { rolRouter } from "./rolRouter.js";
 import { categoriaRouter } from "./categoriaRouter.js";
 import { editorialRouter } from "./editorialRouter.js";
 import { autorRouter } from "./autorRouter.js";
-// ... importa el resto
+import { libroRouter } from "./libroRouter.js";
 
 export async function router(req: IncomingMessage, res: ServerResponse) {
     const metodo = req.method ?? "";
@@ -15,6 +15,7 @@ export async function router(req: IncomingMessage, res: ServerResponse) {
     if (await categoriaRouter(req, res, metodo, url)) return;
     if (await editorialRouter(req, res, metodo, url)) return;
     if (await autorRouter(req, res, metodo, url)) return;
+    if (await libroRouter(req, res, metodo, url)) return;
 
     res.writeHead(404, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ mensaje: "Ruta no encontrada" }));
