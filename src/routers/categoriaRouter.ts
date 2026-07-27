@@ -37,5 +37,5 @@ export async function categoriaRouter(
         }
     }
 
-    return false; // no coincidió ninguna ruta de este módulo
+    return false; 
 }
