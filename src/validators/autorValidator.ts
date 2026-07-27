@@ -1,48 +1,42 @@
-import {ValidationException} from '../exceptions/validationException';
-import {NotFoundException} from '../exceptions/notFoundException';
-import {EditorialRepository} from '../repositories/editorialRepository';
+import { ValidationException } from "../exceptions/validationException.js";
+import { NotFoundException } from "../exceptions/notFoundException.js";
+import { AutorRepository } from "../repositories/autorRepository.js";
 
 export function validarCamposAutor(datos: any): void {
-    if (!datos.nombre) {
-        throw new ValidationException("nombre es obligatorio");
+    if (!datos.nombreAutor) {
+        throw new ValidationException("nombreAutor es obligatorio");
     }
-    if (!datos.apellido) {
-        throw new ValidationException("apellido es obligatorio");
+    if (!datos.nacionalidad) {
+        throw new ValidationException("nacionalidad es obligatoria");
     }
-    if (typeof datos.nombre !== "string" || datos.nombre.trim().length === 0) {
-        throw new ValidationException("nombre debe ser un texto no vacío");
+    if (!datos.fechaNacimiento) {
+        throw new ValidationException("fechaNacimiento es obligatoria");
     }
-    if (typeof datos.apellido !== "string" || datos.apellido.trim().length === 0) {
-        throw new ValidationException("apellido debe ser un texto no vacío");
+
+    if (typeof datos.nombreAutor !== "string" || datos.nombreAutor.trim().length === 0) {
+        throw new ValidationException("nombreAutor debe ser un texto no vacío");
     }
-    if (datos.nombre.length > 50) {
-        throw new ValidationException("nombre no puede tener más de 50 caracteres");
+    if (datos.nombreAutor.length > 50) {
+        throw new ValidationException("nombreAutor no puede tener más de 50 caracteres");
     }
-    if (datos.apellido.length > 50) {
-        throw new ValidationException("apellido no puede tener más de 50 caracteres");
+
+    if (typeof datos.nacionalidad !== "string" || datos.nacionalidad.trim().length === 0) {
+        throw new ValidationException("nacionalidad debe ser un texto no vacío");
     }
-    if (datos.biografia && typeof datos.biografia !== "string") {
-        throw new ValidationException("biografia debe ser un texto");
-    }
-    if (datos.biografia && datos.biografia.length > 500) {
-        throw new ValidationException("biografia no puede tener más de 500 caracteres");
-    }
-    if (datos.nacionalidad && typeof datos.nacionalidad !== "string") {
-        throw new ValidationException("nacionalidad debe ser un texto");
-    }
-    if (datos.nacionalidad && datos.nacionalidad.length > 50) {
+    if (datos.nacionalidad.length > 50) {
         throw new ValidationException("nacionalidad no puede tener más de 50 caracteres");
     }
-    if (datos.fechaNacimiento && isNaN(Date.parse(datos.fechaNacimiento))) {
+
+    if (isNaN(Date.parse(datos.fechaNacimiento))) {
         throw new ValidationException("fechaNacimiento debe ser una fecha válida");
     }
-    if (datos.fechaNacimiento && new Date(datos.fechaNacimiento) > new Date("2027-01-01")) {
+    if (new Date(datos.fechaNacimiento) > new Date()) {
         throw new ValidationException("fechaNacimiento no puede ser una fecha futura");
     }
 }
 
 export async function validarAutorExiste(id: number): Promise<void> {
-    const autor = await EditorialRepository.obtenerPorId(id);
+    const autor = await AutorRepository.obtenerPorId(id);
     if (!autor || autor.length === 0) {
         throw new NotFoundException("El autor indicado no existe");
     }
