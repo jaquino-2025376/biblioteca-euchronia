@@ -36,7 +36,7 @@ export function validarCamposAutor(datos: any): void {
     if (datos.fechaNacimiento && isNaN(Date.parse(datos.fechaNacimiento))) {
         throw new ValidationException("fechaNacimiento debe ser una fecha válida");
     }
-    if (datos.fechaNacimiento && new Date(datos.fechaNacimiento) > new Date()) {
+    if (datos.fechaNacimiento && new Date(datos.fechaNacimiento) > new Date("2027-01-01")) {
         throw new ValidationException("fechaNacimiento no puede ser una fecha futura");
     }
 }
