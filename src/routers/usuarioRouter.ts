@@ -39,5 +39,5 @@ export async function usuarioRouter(
         }
     }
 
-    return false; // no coincidió ninguna ruta de este módulo
+    return false; 
 }
